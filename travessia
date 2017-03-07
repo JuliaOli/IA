@@ -1,0 +1,133 @@
+import copy
+
+class Node:
+
+    def __init__(self, pai, estadoAtual, custo, margem):
+        self.pai = pai
+        self.estadoAtual = estadoAtual
+        self. custo = custo
+        self.margem = margem
+
+    def custos(self):
+        return self.custo + 1
+
+    def final(self):
+        return self.estadoAtual[0] == 3 & self.estadoAtual[1] == 3 & self.estadoAtual[2] == 0 & self.estadoAtual[3] == 0
+
+    def __eq__(self, other):
+        return self.estadoAtual == other.estadoAtual and self.margem == other.margem
+
+def verifica(node):
+
+    for i in node.estadoAtual:
+
+        if i < 0:
+            return False
+
+    if node.margem:
+
+        return bool(node.estadoAtual[0] >= node.estadoAtual[1] or (node.estadoAtual[0] == 0 and node.estadoAtual[1] > node.estadoAtual[0]))
+
+    else:
+        return bool(node.estadoAtual[2] >= node.estadoAtual[3] or (node.estadoAtual[2] == 0 and node.estadoAtual[3] > node.estadoAtual[2]))
+
+
+def exite(itens, node):
+
+    for i in itens:
+
+        if i == node:
+            return True
+
+    return False
+
+def gerafilhos(node, missionario, canibal, lado):
+
+    pai = copy.deepcopy(node)
+
+    if lado:
+        node.estadoAtual[0] = node.estadoAtual[0] - missionario
+        node.estadoAtual[2] = node.estadoAtual[2] + missionario
+        node.estadoAtual[1] = node.estadoAtual[1] - canibal
+        node.estadoAtual[3] = node.estadoAtual[3] + canibal
+    else:
+        node.estadoAtual[0] = node.estadoAtual[0] + missionario
+        node.estadoAtual[2] = node.estadoAtual[2] - missionario
+        node.estadoAtual[1] = node.estadoAtual[1] + canibal
+        node.estadoAtual[3] = node.estadoAtual[3] - canibal
+
+    return Node(pai,node.estadoAtual, node.custo + 1, not lado)
+
+def criarFilhos(node):
+
+
+    lista = []
+
+    aux = gerafilhos(copy.deepcopy(node), 1, 1, node.margem)
+    if verifica(aux):
+        lista.append(aux)
+
+    aux = gerafilhos(copy.deepcopy(node), 1, 0, node.margem)
+    if verifica(aux):
+        lista.append(aux)
+
+    aux = gerafilhos(copy.deepcopy(node), 0, 1, node.margem)
+    if verifica(aux):
+        lista.append(aux)
+
+    aux = gerafilhos(copy.deepcopy(node), 2, 0, node.margem)
+    if verifica(aux):
+        lista.append(aux)
+
+    aux = gerafilhos(copy.deepcopy(node), 0, 2, node.margem)
+    if verifica(aux):
+        lista.append(aux)
+
+    return lista
+
+def printNode(node):
+
+    print str(proximo.estadoAtual) + "margem " + str(proximo.margem) + " cost " + str(proximo.custo)
+
+
+if __name__ == '__main__':
+
+    lista = [Node(0, [3, 3, 0, 0], 0, True)]
+    javerificada = []
+    final = Node(0,[0,0,3,3], 0, False)
+
+    while lista.__len__() > 0:
+
+        proximo = lista.pop(0)
+
+        if proximo == final:
+            while proximo:
+
+                printNode(proximo)
+                proximo = proximo.pai
+            break
+        filhos = criarFilhos(proximo)
+
+        for i in filhos:
+
+            if not exite(javerificada, i):
+                lista.append(i)
+                javerificada.append(i)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
