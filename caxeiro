@@ -1,0 +1,43 @@
+import random
+import copy
+
+infinite = int("inf")
+
+custo = [[0, 30, 84, 56, infinite, infinite, infinite, 75, infinite, 80],
+         [30, 0, 65, infinite, infinite, infinite, 70, infinite, infinite, 40],
+         [84, 65, 0, 74, 52, 55, infinite, 60, 143, 48],
+         [56, infinite, 74, 0, 135, infinite, infinite, 20, infinite, infinite],
+         [infinite, infinite, 52, 135, 0, 70, infinite, 122, 98, 80],
+         [70, infinite, 55, infinite, 70, 0, 63, infinite, 82, 35],
+         [infinite, 70, infinite, infinite, infinite, 63, 0, infinite, 120, 57],
+         [75, infinite, 135, 20, 122, infinite, infinite, 0, infinite, infinite],
+         [infinite, infinite, 143, infinite, 98, 82, 120, infinite, 0, infinite],
+         [80, 40, 48, infinite, 80, 35, 57, infinite, infinite, 0]]
+
+
+def custos(rotas):
+
+    totalCost = 0.0
+    counter = 0.0
+    for i in rotas:
+        totalCost += custo[counter][i]
+        counter = i
+    totalCost += custo[9][0]
+    return totalCost
+
+
+if __name__ == '__main__':
+    rotas = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    custoFinal = infinite
+    rotaFinal = copy.deepcopy(rotas)
+    for i in range(1, 1000):
+        rand1 = random.randint(1, 9)
+        rand2 = random.randint(1, 9)
+        rotas[rand1], rotas[rand2] = rotas[rand2], rotas[rand1]
+        aux = custos(rotas)
+        if custoFinal > aux != infinite:
+            custoFinal = aux
+            rotaFinal = copy.deepcopy(rotas)
+
+    print custos(rotaFinal)
+    print rotaFinal
