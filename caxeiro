@@ -1,7 +1,7 @@
 import random
 import copy
 
-infinite = int("inf")
+infinite = float("inf")
 
 custo = [[0, 30, 84, 56, infinite, infinite, infinite, 75, infinite, 80],
          [30, 0, 65, infinite, infinite, infinite, 70, infinite, infinite, 40],
@@ -18,10 +18,11 @@ custo = [[0, 30, 84, 56, infinite, infinite, infinite, 75, infinite, 80],
 def custos(rotas):
 
     totalCost = 0.0
-    counter = 0.0
+    counter = 0
     for i in rotas:
-        totalCost += custo[counter][i]
-        counter = i
+        if i <= 9 and counter <= 9:
+            totalCost += custo[counter][i]
+            counter = i
     totalCost += custo[9][0]
     return totalCost
 
@@ -30,7 +31,7 @@ if __name__ == '__main__':
     rotas = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     custoFinal = infinite
     rotaFinal = copy.deepcopy(rotas)
-    for i in range(1, 1000):
+    for i in range(1, 10000):
         rand1 = random.randint(1, 9)
         rand2 = random.randint(1, 9)
         rotas[rand1], rotas[rand2] = rotas[rand2], rotas[rand1]
